@@ -2,8 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dcfcb694-a9da-47a4-a692-a3c05e1f338c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/anju-admin-web/src/views/product/Brand.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/anju-admin-web/src/views/product/ProductType.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/views/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/views/Login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-darkblue/fonts/element-icons.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-darkblue/fonts/element-icons.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-darkblue/fonts/element-icons.woff" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-darkblue/fonts/element-icons.woff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-green/fonts/element-icons.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-green/fonts/element-icons.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-green/fonts/element-icons.woff" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-green/fonts/element-icons.woff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/routes.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,7 +42,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/anju-admin-web/src/views/nav1" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -47,6 +53,14 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="settings.editor.splitter.proportion" value="0.2211838" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\SoftwareInstallation\Java\auju-web-parent\anju-admin-web\src\views\nav1" />
+      <recent name="D:\SoftwareInstallation\Java\auju-web-parent\anju-admin-web\src\views" />
+      <recent name="D:\SoftwareInstallation\Java\auju-web-parent\anju-admin-web\config" />
+      <recent name="D:\SoftwareInstallation\Java\auju-web-parent\anju-admin-web\src" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -79,6 +93,8 @@
       <workItem from="1570873134685" duration="1535000" />
       <workItem from="1570876885889" duration="7000" />
       <workItem from="1570876945649" duration="781000" />
+      <workItem from="1570878411590" duration="1672000" />
+      <workItem from="1570982952087" duration="5128000" />
     </task>
     <servers />
   </component>
@@ -97,16 +113,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/anju-admin-web/src/api/api.js</url>
-          <line>2</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
