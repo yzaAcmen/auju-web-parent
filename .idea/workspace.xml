@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dcfcb694-a9da-47a4-a692-a3c05e1f338c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/anju-admin-web/src/views/product/Brand.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/anju-admin-web/src/views/product/ProductType.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-darkblue/fonts/element-icons.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-darkblue/fonts/element-icons.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-darkblue/fonts/element-icons.woff" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-darkblue/fonts/element-icons.woff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-green/fonts/element-icons.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-green/fonts/element-icons.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-green/fonts/element-icons.woff" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/assets/theme/theme-green/fonts/element-icons.woff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/anju-admin-web/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/anju-admin-web/src/routes.js" afterDir="false" />
-    </list>
+    <list default="true" id="dcfcb694-a9da-47a4-a692-a3c05e1f338c" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,8 +85,16 @@
       <workItem from="1570876885889" duration="7000" />
       <workItem from="1570876945649" duration="781000" />
       <workItem from="1570878411590" duration="1672000" />
-      <workItem from="1570982952087" duration="5128000" />
+      <workItem from="1570982952087" duration="5269000" />
     </task>
+    <task id="LOCAL-00001" summary="商品管理代码提交">
+      <created>1570995127069</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1570995127069</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -113,5 +112,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="商品管理代码提交" />
+    <option name="LAST_COMMIT_MESSAGE" value="商品管理代码提交" />
   </component>
 </project>
