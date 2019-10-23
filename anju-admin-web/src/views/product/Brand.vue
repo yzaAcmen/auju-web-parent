@@ -243,7 +243,6 @@
             },
             //文件删除
             handleRemove(file, fileList) {
-                console.debug("1111111111111111")
                 console.debug(file,fileList);
                 this.$confirm().then(() => {
                     this.$http.delete("/common/file?fileId="+file.response.restObj)

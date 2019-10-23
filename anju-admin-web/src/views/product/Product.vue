@@ -100,18 +100,19 @@
                             list-type="picture"
                             :on-success="handleSuccess"
                             :file-list="fileList"
+                            :on-remove="handleRemove"
                     >
                         <el-button size="small" type="primary">点击上传</el-button>
                     </el-upload>
 
                 </el-form-item>
                 <el-form-item label="商品描述">
-                    <el-input type="textarea" v-model="addForm.ext.description" auto-complete="off"></el-input>
+                    <el-input type="textarea" v-model="editForm.description" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="商品详情">
                     <quill-editor
                             ref="QuillEditor"
-                            v-model="addForm.ext.richContent"
+                            v-model="editForm.richContent"
                     ></quill-editor>
                 </el-form-item>
             </el-form>
@@ -155,6 +156,7 @@
                             list-type="picture"
                             :on-success="handleSuccess"
                             :file-list="fileList"
+                            :on-remove="handleRemove"
                     >
                         <el-button size="small" type="primary">点击上传</el-button>
                     </el-upload>
@@ -178,6 +180,60 @@
                 <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
             </div>
         </el-dialog>
+
+        <!--显示属性维护-->
+        <el-dialog size="tiny" title="显示属性" v-model="viewPropertiesDialogVisible" :close-on-click-modal="false">
+
+            <el-form label-width="80px">
+                <el-form-item v-for="viewProperty in viewProperties" :label="viewProperty.specName">
+                    <el-input v-model="viewProperty.value" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click.native="viewPropertiesDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click.native="handleSaveViewProperties">提交</el-button>
+            </div>
+        </el-dialog>
+
+        <!--SKU属性维护-->
+        <el-dialog title="SKU属性" v-model="skuPropertiesDialogVisible" :close-on-click-modal="false">
+
+            <el-card class="box-card" v-for="(skuProperty,i) in skuProperties">
+                <div slot="header" class="clearfix">
+                    <span style="line-height: 36px;">{{skuProperty.specName}}</span>
+                </div>
+                <div v-for="index in skuProperty.options.length+1" class="text item">
+                    <el-row>
+                        <el-col :span="18">
+                            <el-input v-model="skuProperty.options[index-1]" auto-complete="off"></el-input>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-button @click="removeProperty(i,index-1)">删除</el-button>
+                        </el-col>
+                    </el-row>
+                </div>
+            </el-card>
+
+            <el-table :data="skus" highlight-current-row style="width: 100%;">
+                <!--sku属性-->
+                <el-table-column v-if="key!='price'&&key!='store'&&key!='indexs'" v-for="(value,key) in skus[0]" :label="key" :prop="key">
+
+                </el-table-column>
+                <!--price和stroe-->
+                <el-table-column v-if="(key=='price'||key=='store')&&key!='indexs'" v-for="(value,key) in skus[0]" :label="key" :prop="key">
+                    <template scope="scope">
+                        <el-input v-model="scope.row[key]" auto-complete="false"/>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click.native="skuPropertiesDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click.native="handleSaveSkuProperties">提交</el-button>
+            </div>
+        </el-dialog>
+
     </section>
 </template>
 
@@ -187,6 +243,15 @@
     export default {
         data() {
             return {
+                //显示属性
+                viewProperties:[],
+                //sku属性
+                skuProperties:[],
+                //sku
+                skus:[],
+                //显示属性维护的模态框
+                viewPropertiesDialogVisible:false,
+                skuPropertiesDialogVisible:false,
                 //商品类型
                 selectedType2:[],
                 //商品品牌
@@ -230,7 +295,9 @@
                         name:'',
                         id:''
                     },
-                    state:''
+                    state:'',
+                    description:'',
+                    richContent:''
                 },
 
                 addFormVisible: false,//新增界面是否显示
@@ -260,11 +327,139 @@
             }
         },
         methods: {
+            //删除sku属性选项
+            removeProperty(index1,index2){
+                //index1 第几个sku属性
+                //index2  属性的第几个选项
+                this.skuProperties[index1].options.splice(index2,1);
+                //删除options的索引为index2的元素
+                //index 从第几个开始删除   count  删除几个  item...  删除完之后在num处添加几个
+                //数组对象.splice(index,count,item...)
+
+            },
+            //sku属性维护
+            handleSkuProperties(){
+                //只能选中一行数据
+                if(this.sels.length==0){
+                    this.$message({
+                        message: '请选中一行数据',
+                        type: 'warning'
+                    });
+                    return;
+                }
+                if(this.sels.length>1){
+                    this.$message({
+                        message: '只能选中一行数据',
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+                let productId = this.sels[0].id;
+
+                //查询要维护商品的sku属性
+                this.$http.get("/product/product/skuProperties/"+productId)
+                    .then(res=>{
+                        this.skuProperties = res.data;
+                    })
+
+                //打开模态框
+                this.skuPropertiesDialogVisible = true;
+            },
+            //sku属性保存
+            handleSaveSkuProperties(){
+                let productId = this.sels[0].id;
+
+                let param = {};
+                param.skuProperties = this.skuProperties;
+                param.skus = this.skus;
+
+                this.$confirm('确认保存吗?', '提示', {
+                    type: 'warning'
+                }).then(() => {
+                    this.$http.post("/product/product/updateSkuProperties?productId="+productId,param)
+                        .then(res=>{
+                            let {success,message,restObj} = res.data;
+                            if(success){
+                                this.$message({
+                                    message: '保存成功!',
+                                    type: 'success'
+                                });
+                                this.skuPropertiesDialogVisible = false;
+                            }else{
+                                this.$message({
+                                    message: message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                }).catch(() => {
+
+                });
+            },
+            //显示属性维护
+            handleViewProperties(){
+                //只能选中一行数据
+                if(this.sels.length==0){
+                    this.$message({
+                        message: '请选中一行数据',
+                        type: 'warning'
+                    });
+                    return;
+                }
+                if(this.sels.length>1){
+                    this.$message({
+                        message: '只能选中一行数据',
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+                let productId = this.sels[0].id;
+
+                //查询要维护商品的显示属性
+                this.$http.get("/product/product/viewProperties/"+productId)
+                    .then(res=>{
+                        this.viewProperties = res.data;
+                    })
+
+                //打开模态框
+                this.viewPropertiesDialogVisible = true;
+            },
+            //显示属性保存
+            handleSaveViewProperties(){
+
+                let productId = this.sels[0].id;
+
+                this.$confirm('确认保存吗?', '提示', {
+                    type: 'warning'
+                }).then(() => {
+                    this.$http.post("/product/product/updateViewProperties?productId="+productId,this.viewProperties)
+                        .then(res=>{
+                            let {success,message,restObj} = res.data;
+                            if(success){
+                                this.$message({
+                                    message: '保存成功!',
+                                    type: 'success'
+                                });
+                                this.viewPropertiesDialogVisible = false;
+                            }else{
+                                this.$message({
+                                    message: message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                }).catch(() => {
+
+                });
+            },
+
             //文件上传成功后的钩子函数
             handleSuccess(response, file, fileList){
                 let {success,message,restObj} = response;
                 if(success){
-                    this.addForm.logo = restObj;
+                    this.addForm.medias = restObj;
                     this.$message({
                         message: '上传成功',
                         type: 'success'
@@ -276,6 +471,16 @@
                     });
                 }
                 this.fileList = fileList;
+            }, //文件删除
+            handleRemove(file, fileList) {
+                console.debug(file,fileList);
+                this.$confirm().then(() => {
+                    this.$http.delete("/common/file?fileId="+file.response.restObj)
+                        .then(res=>{
+
+                        });
+                }).catch(() => {
+                });
             },
             getBrands(){
                 this.$http.get("/product/brand/list")
@@ -304,14 +509,58 @@
                         this.producttypes=this.getTreeData(res.data);
                     })
             },
-            //显示属性维护
-            handleViewProperties(){},
-            //sku属性维护
-            handleSkuProperties(){},
             //上架
-            handleOnSale(){},
+            handleOnSale(){
+                var ids = this.sels.map(item => item.id).toString();
+                this.$confirm('确认上架选中记录吗？', '提示', {
+                    type: 'warning'
+                }).then(() => {
+                    this.listLoading = true;
+                    this.$http.get("/product/product/onSale?ids="+ids)
+                        .then(res=>{
+                            this.listLoading = false;
+                            let {success,message,resultObject}=res.data;
+                            if (success){
+                                this.$message({
+                                    message: '上架成功',
+                                    type: 'success'
+                                });
+                                this.getProducts();
+                            }else {
+                                this.$message({
+                                    message: message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                }).catch(() => {});
+            },
             //下架
-            handleOffSale(){},
+            handleOffSale(){
+                var ids = this.sels.map(item => item.id).toString();
+                this.$confirm('确认下架选中记录吗？', '提示', {
+                    type: 'warning'
+                }).then(() => {
+                    this.listLoading = true;
+                    this.$http.get("/product/product/offSale?ids="+ids)
+                        .then(res=>{
+                            this.listLoading = false;
+                            let {success,message,resultObject}=res.data;
+                            if (success){
+                                this.$message({
+                                    message: '下架成功',
+                                    type: 'success'
+                                });
+                                this.getProducts();
+                            }else {
+                                this.$message({
+                                    message: message,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                }).catch(() => {});
+            },
             //格式化时间
             formatOnSaleTime(row, column){
                 return this.formatTime(row.onSaleTime)
@@ -425,10 +674,12 @@
                 this.editForm.productType=row.productType;
                 this.editForm.brand=row.brand;
                 this.fileList.push({
-                    "url":"http://172.16.4.46/"+row.logo
+                    "url":"http://172.16.4.46/"+row.medias
                 });
                 this.selectedType2=this.changeDetSelect(row.productType.id,this.producttypes);
                 this.barnd2=this.changeDetSelect(row.brand.id,this.brands);
+                console.debug(index)
+                console.debug("row有什么"+"-------------------------"+row)
             },
             changeDetSelect(key,treeData){
                 let arr = []; // 在递归时操作的数组
@@ -535,18 +786,6 @@
                                         });
                                     }
                                 })
-
-                            /*addUser(para).then((res) => {
-                                this.addLoading = false;
-                                //NProgress.done();
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
-                                this.$refs['addForm'].resetFields();
-                                this.addFormVisible = false;
-                                this.getProducts();
-                            });*/
                         });
                     }
                 });
@@ -586,6 +825,58 @@
             this.loadTypeTree();
             this.getBrands();
             this.loadTypeTree();
+        },
+        watch: {
+            skuProperties: {
+                handler(val, oldval) {
+
+                    //过滤掉options为空数组的sku属性
+                    let skuPropertiesArr = this.skuProperties.filter(e => e.options.length > 0);
+
+                    let result = skuPropertiesArr.reduce((pre, cur, currentIndex) => {
+                        //pre   [{}]
+                        //cur  {specName:"年龄",options:["白皙","小麦黄"]}
+                        //结果: [{年龄:"白皙"},{"年龄":"小麦黄"}]
+                        let temp = [];
+                        //外层循环计算的是第几个sku属性
+                        pre.forEach(e1 => { //e1 {}  如果是第二次reduce{年龄:"萝莉"}
+                            //内层循环遍历的是第几个sku属性选项
+                            cur.options.forEach((e2, index) => { //e2  "白皙"   "小麦黄"
+
+
+                                let obj = Object.assign({}, e1);
+                                obj[cur.specName] = e2;
+
+
+                                //获取上一次的indexs,后面拼接这一次的索引
+                                let lastIndexs = obj.indexs;
+
+                                console.debug("lastIndexs", lastIndexs)
+
+                                if (!lastIndexs) lastIndexs = "";
+
+                                //判断是否是最后一次reduce
+                                if (currentIndex == skuPropertiesArr.length - 1) {
+                                    obj.price = 0;
+                                    obj.store = 0;
+                                    lastIndexs = lastIndexs + index;
+                                } else {
+                                    lastIndexs = lastIndexs + index + "_";
+                                }
+
+                                obj.indexs = lastIndexs;
+
+
+                                temp.push(obj);
+                            })
+                        })
+                        return temp;
+                    }, [{}])
+
+                    this.skus = result;
+                },
+                deep: true
+            }
         }
     }
 
